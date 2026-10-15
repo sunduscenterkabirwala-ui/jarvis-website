@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jarvis Retail OS — Jarvis runs the shop. The owner makes the decisions.</title>
 <meta name="description" content="Jarvis Retail OS is one system that runs a whole shop: billing, inventory, accounts, credit, online orders, marketing and AI-powered insights — while the owner makes the decisions.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f766e'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='36' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3EJ%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jarvis Retail OS — Jarvis runs the shop. The owner makes the decisions.">
+<meta property="og:description" content="One platform for billing, inventory, accounts, customer credit, payments, online orders, delivery, marketing and AI-powered insights — built inside a real shop in Pakistan.">
+<meta property="og:url" content="https://sunduscenterkabirwala-ui.github.io/jarvis-website/">
+<meta property="og:image" content="https://sunduscenterkabirwala-ui.github.io/jarvis-website/img/dashboard-home.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Jarvis Retail OS — Jarvis runs the shop. The owner makes the decisions.">
+<meta name="twitter:description" content="One platform for billing, inventory, accounts, credit, online orders, marketing and AI insights — built inside a real shop in Pakistan.">
+<meta name="twitter:image" content="https://sunduscenterkabirwala-ui.github.io/jarvis-website/img/dashboard-home.jpg">
 <style>
   :root{--ink:#17323b;--teal:#0f766e;--teal2:#115e59;--sand:#f6f1e7;--card:#ffffff;--muted:#5b6b72;--line:#e3ddd0}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -38,6 +48,14 @@
   .proof{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;text-align:center}
   .proof .num{font-size:30px;color:var(--teal);font-weight:bold}
   .proof .lbl{font-family:Helvetica,Arial,sans-serif;font-size:13.5px;color:var(--muted)}
+  .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+  .shots figure{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .shots img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid var(--line)}
+  .shots figcaption{font-family:Helvetica,Arial,sans-serif;font-size:13px;color:var(--muted);margin-top:10px}
+  .contact{background:var(--ink);color:#f3efe6;border-radius:14px;padding:30px;text-align:left}
+  .contact h2{color:#fff}
+  .contact p{color:#c9d4d6;font-family:Helvetica,Arial,sans-serif;font-size:15px;max-width:640px}
+  .contact .cta{margin-top:20px}
   footer{padding:30px 0 46px;color:var(--muted);font-family:Helvetica,Arial,sans-serif;font-size:13.5px;border-top:1px solid var(--line);margin-top:12px}
   @media(max-width:640px){.hero h1{font-size:32px}.band ul{columns:1}}
 </style>
@@ -104,6 +122,21 @@
   </section>
 
   <section>
+    <h2>See the real product</h2>
+    <p class="sub">Not mockups — the actual Jarvis dashboard, running in a test deployment with demo data.</p>
+    <div class="shots">
+      <figure>
+        <img src="img/dashboard-home.jpg" alt="Jarvis Retail OS dashboard — the owner's home briefing with stock value, review queue and daily sales target" loading="lazy">
+        <figcaption>The owner's home screen: today's main task, stock value, review queue and the daily sales target — one briefing instead of ten tools.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/dashboard-orders.jpg" alt="Jarvis Retail OS orders screen — COD order lifecycle with a confirmed order synced to the inventory system" loading="lazy">
+        <figcaption>Orders &amp; sales: the COD order lifecycle, with every confirmed order checked against live stock and synced to the inventory system.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
     <h2>Built inside a real shop</h2>
     <p class="sub">Jarvis was not designed in a lab. It was built and tested end-to-end inside our own family retail shop in Pakistan — real stock, real customers, real daily pressure. Now we are preparing pilot shops: independent retailers first, then the region.</p>
     <div class="proof">
@@ -111,6 +144,14 @@
       <div><div class="num">10</div><div class="lbl">core systems in one platform</div></div>
       <div><div class="num">1</div><div class="lbl">real shop proving ground</div></div>
       <div><div class="num">0</div><div class="lbl">decisions taken without the owner</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="contact">
+      <h2>Talk to the founder</h2>
+      <p>Running a shop and want Jarvis to run it with you — or backing the people who build for the world's smallest retailers? Talk directly to the founder.</p>
+      <a class="cta" href="https://wa.me/923008653797" target="_blank" rel="noopener">Chat on WhatsApp</a>
     </div>
   </section>
 
