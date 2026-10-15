@@ -50,6 +50,7 @@
   .proof .lbl{font-family:Helvetica,Arial,sans-serif;font-size:13.5px;color:var(--muted)}
   .shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
   .shots figure{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .shots a{display:block;cursor:zoom-in}
   .shots img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid var(--line)}
   .shots figcaption{font-family:Helvetica,Arial,sans-serif;font-size:13px;color:var(--muted);margin-top:10px}
   .contact{background:var(--ink);color:#f3efe6;border-radius:14px;padding:30px;text-align:left}
@@ -123,14 +124,14 @@
 
   <section>
     <h2>See the real product</h2>
-    <p class="sub">Not mockups — the actual Jarvis dashboard, running in a test deployment with demo data.</p>
+    <p class="sub">Not mockups — the actual Jarvis dashboard, running in a test deployment with demo data. Click any screenshot to view it full size.</p>
     <div class="shots">
       <figure>
-        <img src="img/dashboard-home.jpg" alt="Jarvis Retail OS dashboard — the owner's home briefing with stock value, review queue and daily sales target" loading="lazy">
+        <a href="img/dashboard-home-full.jpg" target="_blank" rel="noopener"><img src="img/dashboard-home.jpg" alt="Jarvis Retail OS dashboard — the owner's home briefing with stock value, review queue and daily sales target" loading="lazy"></a>
         <figcaption>The owner's home screen: today's main task, stock value, review queue and the daily sales target — one briefing instead of ten tools.</figcaption>
       </figure>
       <figure>
-        <img src="img/dashboard-orders.jpg" alt="Jarvis Retail OS orders screen — COD order lifecycle with a confirmed order synced to the inventory system" loading="lazy">
+        <a href="img/dashboard-orders-full.jpg" target="_blank" rel="noopener"><img src="img/dashboard-orders.jpg" alt="Jarvis Retail OS orders screen — COD order lifecycle with a confirmed order synced to the inventory system" loading="lazy"></a>
         <figcaption>Orders &amp; sales: the COD order lifecycle, with every confirmed order checked against live stock and synced to the inventory system.</figcaption>
       </figure>
     </div>
