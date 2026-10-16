@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Catalog</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{--pri:#16a34a;--pri-d:#14532d;--pri-l:#f0fdf4;--bar:#14532d;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f4f6f4;color:#1c2b1c;max-width:640px;margin:0 auto;min-height:100vh}
+body[data-th="blue"]{--pri:#2563eb;--pri-d:#1e3a8a;--pri-l:#eff6ff;--bar:#1e3a8a}
+body[data-th="orange"]{--pri:#ea580c;--pri-d:#7c2d12;--pri-l:#fff7ed;--bar:#7c2d12}
+body[data-th="purple"]{--pri:#9333ea;--pri-d:#581c87;--pri-l:#faf5ff;--bar:#581c87}
+body[data-th="teal"]{--pri:#0d9488;--pri-d:#134e4a;--pri-l:#f0fdfa;--bar:#134e4a}
+body[data-th="slate"]{--pri:#475569;--pri-d:#0f172a;--pri-l:#f8fafc;--bar:#0f172a}
+body[data-th="pink"]{--pri:#ec4899;--pri-d:#831843;--pri-l:#fdf2f8;--bar:#831843}
+body[data-th="red"]{--pri:#dc2626;--pri-d:#7f1d1d;--pri-l:#fef2f2;--bar:#7f1d1d}
+.shop-header{background:linear-gradient(135deg,var(--pri-d),var(--pri));color:#fff;padding:22px 18px;text-align:center}
+.shop-name{font-size:24px;font-weight:800}.shop-tag{margin-top:6px;font-size:14px;opacity:.92}.shop-meta{margin-top:8px;font-size:12px;opacity:.8}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid #e2e8e2}
+.cat{border:1px solid #cfe3cf;background:#f0f7f0;border-radius:20px;padding:7px 14px;font-size:13px;white-space:nowrap;cursor:pointer}
+.cat.on{background:var(--pri);color:#fff;border-color:var(--pri);font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;padding-bottom:90px}
+.card{background:#fff;border-radius:12px;padding:14px 12px;box-shadow:0 1px 4px rgba(0,0,0,.07);display:flex;flex-direction:column;gap:8px}
+.pname{font-size:14px;font-weight:600;min-height:38px}.pprice{color:var(--pri);font-weight:800;font-size:15px}
+.btn-add{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:9px;font-size:14px;font-weight:700;cursor:pointer}
+.qty{display:flex;align-items:center;justify-content:space-between;background:var(--pri-l);border-radius:8px;padding:4px}
+.qty button{background:var(--pri);color:#fff;border:0;width:32px;height:32px;border-radius:8px;font-size:18px;cursor:pointer}
+.qty span{font-weight:800}
+.cart-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:640px;background:var(--bar);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;z-index:10}
+.btn-order{background:#25d366;color:#06351a;border:0;border-radius:10px;padding:12px 16px;font-size:15px;font-weight:800;cursor:pointer}
+.cart-detail{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:640px;background:#fff;border-radius:16px 16px 0 0;padding:18px;z-index:20;box-shadow:0 -4px 20px rgba(0,0,0,.2);max-height:80vh;overflow:auto}
+.cart-detail ul{list-style:none;margin-bottom:12px;font-size:14px}.cart-detail li{padding:6px 0;border-bottom:1px dashed #e2e8e2}
+.cart-detail input{width:100%;padding:11px;border:1px solid #cbd5cb;border-radius:8px;margin-bottom:10px;font-size:14px}
+.btn-close{background:#e5e7eb;border:0;border-radius:10px;padding:12px;width:100%;margin-top:8px;font-size:14px;cursor:pointer}
+footer{text-align:center;padding:18px;font-size:12px;color:#6b7a6b}
+</style>
+</head>
+<body>
+<header class="shop-header">
+  <div class="shop-name" id="shopName">Dukaan</div>
+  <div class="shop-tag" id="shopTag"></div>
+  <div class="shop-meta" id="shopMeta"></div>
+</header>
+<nav class="cats" id="cats"></nav>
+<main class="grid" id="grid"></main>
+<div class="cart-bar" id="cartBar" hidden>
+  <div><span id="cartCount">0</span> cheezein • Rs <span id="cartTotal">0</span></div>
+  <button class="btn-order" id="orderBtn">WhatsApp par order bhejein</button>
+</div>
+<div class="cart-detail" id="cartDetail" hidden>
+  <h3>Aap ka order</h3>
+  <ul id="cartItems"></ul>
+  <input id="custName" placeholder="Aap ka naam">
+  <input id="custAddr" placeholder="Pata (mohalla / gali)">
+  <button class="btn-order" id="sendBtn" style="width:100%">WhatsApp par bhejein</button>
+  <button class="btn-close" id="closeBtn">Band karein</button>
+</div>
+<footer>Online catalog — order WhatsApp par jata hai, koi app install nahi.</footer>
+<script>
+"use strict";
+/* Service Site Engine — Catalog App v1 (whatsapp-toolkit protocol compatible).
+   SECURITY FIX vs toolkit original: tamam user/link data esc() se render hota
+   hai — link me crafted naam se script injection (XSS) nahi ho sakta. */
+const DEMO = { n:"Demo General Store", w:"923001234567",
+  t:"Roz ka sauda, ab WhatsApp par", m:"Main Bazaar • Subah 9 – Raat 10", th:"green",
+  p:[{n:"Cheeni (Sugar) 1kg",c:"Grocery",p:145},{n:"Atta 5kg",c:"Grocery",p:680},
+     {n:"Doodh (Milk) 1 Litre",c:"Dairy",p:190},{n:"Anda (Eggs) 1 dozen",c:"Dairy",p:360}] };
+const THEMES = ["green","blue","orange","purple","teal","slate","pink","red"];
+function esc(s){return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function loadConfig(){
+  try{
+    const h = location.hash || "";
+    if(!h.startsWith("#s=")) return DEMO;
+    const json = decodeURIComponent(escape(atob(h.slice(3).replace(/-/g,"+").replace(/_/g,"/"))));
+    const c = JSON.parse(json);
+    if(!c || typeof c.n!=="string" || !Array.isArray(c.p) || !c.p.length) return DEMO;
+    c.w = String(c.w||"").replace(/\D/g,"");
+    if(!/^\d{10,15}$/.test(c.w)) return DEMO;
+    if(!THEMES.includes(c.th)) c.th = "green";
+    c.p = c.p.filter(x=>x && x.n && +x.p>0).map(x=>({n:String(x.n).slice(0,60), c:String(x.c||"General").slice(0,24), p:Math.round(+x.p)}));
+    return c.p.length ? c : DEMO;
+  }catch(e){ return DEMO; }
+}
+const CFG = loadConfig();
+const PRODUCTS = CFG.p.map((x,i)=>({id:i+1, name:x.n, cat:x.c, price:x.p}));
+const cart = new Map();
+const fmt = n => n.toLocaleString("en-PK");
+document.body.dataset.th = CFG.th || "green";
+document.title = CFG.n + " — Online Catalog";
+document.getElementById("shopName").textContent = CFG.n;
+document.getElementById("shopTag").textContent = CFG.t || "";
+document.getElementById("shopMeta").textContent = CFG.m || "";
+function totals(){ let n=0,t=0; for(const [id,q] of cart){ const p=PRODUCTS.find(x=>x.id===id); n+=q; t+=q*p.price; } return {n,t}; }
+function renderCats(){
+  const cats = ["Sab", ...new Set(PRODUCTS.map(p=>p.cat))];
+  document.getElementById("cats").innerHTML = cats.map((c,i)=>
+    `<button class="cat${i===0?" on":""}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+  document.querySelectorAll(".cat").forEach(b=> b.onclick=()=>{
+    document.querySelectorAll(".cat").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); renderGrid(b.dataset.cat); });
+}
+function renderGrid(cat="Sab"){
+  const list = PRODUCTS.filter(p=>cat==="Sab"||p.cat===cat);
+  document.getElementById("grid").innerHTML = list.map(p=>{
+    const q = cart.get(p.id)||0;
+    return `<div class="card"><div class="pname">${esc(p.name)}</div><div class="pprice">Rs ${fmt(p.price)}</div>`+
+      (q===0 ? `<button class="btn-add" data-add="${p.id}">+ Add</button>`
+             : `<div class="qty"><button data-dec="${p.id}">−</button><span>${q}</span><button data-inc="${p.id}">+</button></div>`)+`</div>`;
+  }).join("");
+  document.querySelectorAll("[data-add]").forEach(b=> b.onclick=()=>{ cart.set(+b.dataset.add,1); sync(); });
+  document.querySelectorAll("[data-inc]").forEach(b=> b.onclick=()=>{ cart.set(+b.dataset.inc, cart.get(+b.dataset.inc)+1); sync(); });
+  document.querySelectorAll("[data-dec]").forEach(b=> b.onclick=()=>{ const id=+b.dataset.dec, q=cart.get(id)-1; q<=0?cart.delete(id):cart.set(id,q); sync(); });
+}
+function sync(){
+  const {n,t} = totals();
+  document.getElementById("cartBar").hidden = n===0;
+  document.getElementById("cartCount").textContent = n;
+  document.getElementById("cartTotal").textContent = fmt(t);
+  const a = document.querySelector(".cat.on");
+  renderGrid(a ? a.dataset.cat : "Sab");
+}
+function buildOrderMessage(name, addr){
+  const lines = ["*Naya Order — "+CFG.n+"*", ""];
+  for(const [id,q] of cart){ const p=PRODUCTS.find(x=>x.id===id); lines.push("• "+p.name+" × "+q+" = Rs "+fmt(q*p.price)); }
+  lines.push("", "*Total: Rs "+fmt(totals().t)+"*", "", "Naam: "+(name||"-"), "Pata: "+(addr||"-"));
+  return lines.join("\n");
+}
+document.getElementById("orderBtn").onclick = ()=>{
+  document.getElementById("cartDetail").hidden = false;
+  document.getElementById("cartItems").innerHTML = [...cart].map(([id,q])=>{
+    const p=PRODUCTS.find(x=>x.id===id);
+    return `<li>${esc(p.name)} × ${q} — Rs ${fmt(q*p.price)}</li>`; }).join("");
+};
+document.getElementById("closeBtn").onclick = ()=> document.getElementById("cartDetail").hidden = true;
+document.getElementById("sendBtn").onclick = ()=>{
+  const name = document.getElementById("custName").value.trim();
+  const addr = document.getElementById("custAddr").value.trim();
+  window.open("https://wa.me/"+CFG.w+"?text="+encodeURIComponent(buildOrderMessage(name, addr)), "_blank");
+};
+renderCats(); renderGrid();
+</script>
+</body>
+</html>
